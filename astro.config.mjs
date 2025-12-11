@@ -4,21 +4,26 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
+	site: 'https://henryypin.github.io',
+	base: '/my-flutter-notes',
 	integrations: [
 		starlight({
-			title: 'My Docs',
-			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
+			title: 'Flutter 筆記',
+			logo: {
+				src: './src/assets/logo.svg',
+			},
+			defaultLocale: 'root',
+			locales: {
+				root: {
+					label: '繁體中文',
+					lang: 'zh-TW',
+				}
+			},
+			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/henryypin/my-flutter-notes' }],
 			sidebar: [
 				{
-					label: 'Guides',
-					items: [
-						// Each item here is one entry in the navigation menu.
-						{ label: 'Example Guide', slug: 'guides/example' },
-					],
-				},
-				{
-					label: 'Reference',
-					autogenerate: { directory: 'reference' },
+					label: '資源',
+					autogenerate: { directory: 'resources' },
 				},
 			],
 		}),
