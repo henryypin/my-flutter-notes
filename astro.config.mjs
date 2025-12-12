@@ -25,6 +25,10 @@ export default defineConfig({
 					label: '資源',
 					autogenerate: { directory: 'resources' },
 				},
+				{
+					label: '基礎',
+					autogenerate: { directory: 'foundations' },
+				},
 			],
 		}),
 	],
