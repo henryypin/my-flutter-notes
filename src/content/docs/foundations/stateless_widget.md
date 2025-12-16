@@ -5,7 +5,7 @@ sidebar:
     order: 20
 ---
 
-`StatelessWidget` 一種不需要可變狀態（mutable state）的 Widget，僅依賴 Widget 本身的配置資訊（configuration）以及 BuildContext，不會動態變化。
+`StatelessWidget` 一種不需要可變狀態（mutable state）的 `Widget`，僅依賴 `Widget` 本身的配置資訊（configuration）以及 `BuildContext`，不會動態變化。
 
 ### StatelessWidget 類別
 

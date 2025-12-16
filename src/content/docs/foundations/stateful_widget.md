@@ -5,7 +5,7 @@ sidebar:
     order: 30
 ---
 
-`StatefulWidget` 是一種擁有可變狀態（mutable state）的 Widget，能夠根據用戶交互或其他事件動態更新 UI。
+`StatefulWidget` 是一種擁有可變狀態（mutable state）的 `Widget`，能夠根據用戶交互或其他事件動態更新 UI。
 
 ### StatefulWidget 類別
 
