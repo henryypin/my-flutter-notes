@@ -112,3 +112,65 @@ stateDiagram-v2
   deactivate --> dispose
   dispose --> [*]
 ```
+
+
+### StatefulElement 類別
+
+```dart
+/// Source: https://github.com/flutter/flutter/blob/d81baabfec4c49c9fcf96a05187f82604891f055/packages/flutter/lib/src/widgets/framework.dart#L5899-L6132
+class StatefulElement extends ComponentElement {
+  StatefulElement(StatefulWidget widget) : _state = widget.createState(), super(widget) { ... }
+
+  State<StatefulWidget> get state => _state!;
+  State<StatefulWidget>? _state;
+
+  @override
+  Widget build() => state.build(this);
+
+  @override
+  void reassemble() { ... }
+
+  @override
+  void performRebuild() { ... }
+
+  @override
+  void update(StatefulWidget newWidget) { ... }
+
+  @override
+  void activate() { ... }
+
+  @override
+  void deactivate() { ... }
+
+  @override
+  void unmount() { ... }
+
+  @override
+  InheritedWidget dependOnInheritedElement(Element ancestor, {Object? aspect}) { ... }
+
+  @override
+  void didChangeDependencies() { ... }
+}
+```
+
+#### StatefulElement 特性
+
+- **持有兩個物件**
+  - `StatefulElement` 同時管理 `StatefulWidget`（不可變配置）和 `State` 物件（可變狀態）。
+
+- **State 生命週期管理**
+  - `State` 的整個生命週期（`initState`、`didUpdateWidget`、`dispose` 等）由 `StatefulElement` 負責調用。
+  - 這確保狀態在 Widget Tree 變化時正確初始化、更新和清理。
+
+- **重建成本稍高**
+  - 每次重建時呼叫 `state.build()`，並處理狀態變化。
+  - 相比 `StatelessElement`，多出狀態管理的開銷，但支援動態更新。
+
+- **支援 GlobalKey 移植**
+  - 當帶 `GlobalKey` 的 `StatefulWidget` 在樹中移動時，`StatefulElement` 會保留同一組（widget + state），避免狀態丟失。
+
+- **關鍵生命週期方法**
+  - `mount()`：建立 `State` 物件並初始化。
+  - `update()`：更新 widget 並呼叫 `didUpdateWidget`。
+  - `performRebuild()`：呼叫 `state.build()` 並更新子樹。
+  - `deactivate()` 和 `unmount()`：處理暫時移除和永久銷毀，呼叫 `dispose`。

@@ -45,3 +45,32 @@ abstract class StatelessWidget extends Widget {
 - **性能優化**
   - 由於無狀態，Flutter 可以安全地重用 `StatelessWidget` 的實例，而無需擔心狀態同步問題。
   - 在 Widget 樹重建時，如果新舊 `StatelessWidget` 的類型和 key 相同，Flutter 會嘗試重用現有的 `Element`。
+
+### StatelessElement 類別
+
+```dart
+/// Source: https://github.com/flutter/flutter/blob/d81baabfec4c49c9fcf96a05187f82604891f055/packages/flutter/lib/src/widgets/framework.dart#L5883-L5897
+class StatelessElement extends ComponentElement {
+  StatelessElement(StatelessWidget super.widget);
+
+  @override
+  Widget build() => (widget as StatelessWidget).build(this);
+
+  @override
+  void update(StatelessWidget newWidget) {
+    super.update(newWidget);
+    assert(widget == newWidget);
+    rebuild(force: true);
+  }
+}
+```
+
+#### StatelessElement 特性
+
+- **無內部可變狀態**
+  - 不像 `StatefulElement` 持有獨立的 `State` 物件，`StatelessElement` 直接持有 `StatelessWidget` 作為配置。
+  - 這意味著 `StatelessElement` 不管理任何內部狀態，所有行為都由其對應的 `Widget` 決定。
+
+- **重建成本極低**
+  - 因為沒有額外狀態，重建時只需執行 `widget.build()` 並更新子樹。
+  - 這種設計使得 `StatelessElement` 在重建過程中非常高效，適合用於靜態或簡單的 UI 組件。
