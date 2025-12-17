@@ -80,6 +80,21 @@ abstract class Element extends DiagnosticableTree implements BuildContext {
   - `dependOnInheritedElement` 方法允許子 Element 依賴祖先的 `InheritedElement`，實現數據共享和通知機制。
   - `markNeedsBuild` 用於標記需要重建，觸發 Flutter 的重建流程。
 
+#### Element 生命週期流程圖
+
+```mermaid
+stateDiagram-v2
+  [*] --> mount
+  mount --> build
+  build --> update: Widget 更新時
+  update --> build
+  build --> deactivate: Element 被移除時
+  deactivate --> activate: 重新加入樹時
+  activate --> build
+  deactivate --> unmount: 永久移除
+  unmount --> [*]
+```
+
 
 ### StatelessElement 類別
 
@@ -110,6 +125,15 @@ class StatelessElement extends ComponentElement {
   - 因為沒有額外狀態，重建時只需執行 `widget.build()` 並更新子樹。
   - 這種設計使得 `StatelessElement` 在重建過程中非常高效，適合用於靜態或簡單的 UI 組件。
 
+#### StatelessElement 掛載流程圖
+
+```mermaid
+stateDiagram-v2
+    [*] --> mount
+    mount --> build
+    build --> rebuild: 標記需要重建 (markNeedsBuild)
+    rebuild --> build
+```
 
 ### StatefulElement 類別
 
@@ -171,3 +195,21 @@ class StatefulElement extends ComponentElement {
   - `update()`：更新 widget 並呼叫 `didUpdateWidget`。
   - `performRebuild()`：呼叫 `state.build()` 並更新子樹。
   - `deactivate()` 和 `unmount()`：處理暫時移除和永久銷毀，呼叫 `dispose`。
+
+#### StatefulElement 掛載流程圖
+
+```mermaid
+stateDiagram-v2
+  [*] --> mount
+  mount --> build
+  build --> performRebuild: 標記需要重建 (markNeedsBuild)
+  performRebuild --> build
+  build --> update: Widget 更新時
+  update --> build
+  build --> deactivate: Element 被移除時
+  deactivate --> activate: 重新加入樹時
+  activate --> build
+  deactivate --> unmount: 永久移除
+  unmount --> [*]
+```
+
