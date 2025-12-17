@@ -95,3 +95,20 @@ abstract class State<T extends StatefulWidget> with Diagnosticable {
   - `build()`：每次需要描述 UI 時（`initState` 後、`setState` 後、父 `Widget` 重建後、`InheritedWidget` 改變後等）呼叫。
   - `deactivate()`: 是生命週期中的「中間站」：暫時移除或移動，但不一定銷毀。
   - `dispose()`：`State` 物件即將永久銷毀，`Widget` 從樹中移除時調用。用於釋放資源、取消訂閱、停止動畫 (在 `super.dispose()` 前)。
+
+### StatefulWidget 生命週期流程圖
+
+```mermaid
+stateDiagram-v2
+  [*] --> createState
+  createState --> initState
+  initState --> didChangeDependencies
+  didChangeDependencies --> build
+  build --> didUpdateWidget: Widget 更新時
+  didUpdateWidget --> build
+  build --> setState: 用戶觸發 setState
+  setState --> build
+  build --> deactivate: 元件被移除時
+  deactivate --> dispose
+  dispose --> [*]
+```
